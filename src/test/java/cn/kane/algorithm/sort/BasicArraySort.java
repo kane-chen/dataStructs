@@ -1,8 +1,8 @@
-package cn.kane.DatasStructures.sort;
+package cn.kane.algorithm.sort ;
 
 import java.util.Random;
 
-public class ArraySort {
+public class BasicArraySort {
 
 	private  int[] array = new int[10] ;
 	
@@ -183,13 +183,143 @@ public class ArraySort {
 		targetArr[pos1] = targetArr[pos2];
 		targetArr[pos2] = temp;
 	}
+	
+	/**
+	 * 插入排序：将数组分为无序区和有序区两个区，然后不断将无序区的第一个元素按大小顺序插入到有序区中去，最终将所有无序区元素都移动到有序区完成排序。
+	 * 
+	 * @param dataArr
+	 * @return
+	 */
+	public static int[] basicInsertSort(int[] dataArr) {
+		for (int unSortedIndex = 1; unSortedIndex < dataArr.length; unSortedIndex++) {
+			for (int sortedIndex = 0; sortedIndex < unSortedIndex; sortedIndex++) {
+				if (dataArr[sortedIndex] > dataArr[unSortedIndex]) {
+					swap(dataArr, sortedIndex, unSortedIndex);
+				}
+			}
+		}
+		return dataArr;
+	}
+
+	/**
+	 * 希尔排序：将数组分成step个小组，在小组内通过插入排序，初步缩小step的数值至1，此时array排序完成
+	 * 
+	 * @param datas
+	 * @return
+	 */
+	public static int[] shellInsertSort(int[] datas) {
+		int step = datas.length;
+		while (step > 1) {
+			step = step / 2;
+			if (step < 1) {
+				break;
+			}
+			shellInsertSort(datas, step);
+		}
+		return datas;
+	}
+
+	public static int[] shellInsertSort(int[] datas, int step) {
+		for (int x = 0; x < step; x++) {
+			// basic-insert
+			for (int i = step + x; i < datas.length; i += step) {
+				for (int j = x; j < i; j += step) {
+					if (datas[j] > datas[i]) {
+						swap(datas, i, j);
+					}
+				}
+			}
+		}
+		return datas;
+	}
+
+	/**
+	 * 冒泡交换排序：比较相邻2个元素，逆序则交换位置；以达到将最大/小元素移至无序数组的头/尾部
+	 * 
+	 * @param datas
+	 * @return
+	 */
+	public static int[] bubbleSwitchSort(int[] datas) {
+		for (int i = 0; i < datas.length; i++) {
+			for (int j = 1; j < datas.length - i; j++) {
+				if (datas[j - 1] > datas[j]) {
+					swap(datas, j, j - 1);
+				}
+			}
+		}
+		return datas;
+	}
+
+	public static int[] quickSwitchSort(int[] datas) {
+		int startIndex = 0;
+		int endIndex = datas.length-1;
+		quickSwitchSort(datas,startIndex,endIndex) ;
+		return datas;
+
+	}
+
+	public static int[] quickSwitchSort(int[] datas,int startIndex, int endIndex) {
+		if(startIndex < endIndex){
+			int swapIndex = switch4QuickSwitchSort(datas, startIndex, endIndex);
+			quickSwitchSort(datas, startIndex, swapIndex - 1);
+			quickSwitchSort(datas, swapIndex + 1, endIndex);
+		}
+		return datas;
+	}
+
+	public static int switch4QuickSwitchSort(int[] datas, int startIndex, int endIndex) {
+		int tmpData = datas[startIndex];
+		int swapPos = startIndex ;
+		// less than tmpData
+		for (int i = startIndex + 1 ; i <= endIndex; i++) {
+			if (datas[i] < tmpData) {
+				swapPos++;
+				swap(datas, i, swapPos);
+			}
+		}
+		// tmpData
+		swap(datas, startIndex, swapPos);
+		return swapPos;
+	}
+	
+
+	private static void swap(int[] srcArr, int pos1, int pos2) {
+		int tmp = srcArr[pos1];
+		srcArr[pos1] = srcArr[pos2];
+		srcArr[pos2] = tmp;
+	}
+
+	private static String getDatasInArray(int[] datas) {
+		StringBuffer buffer = new StringBuffer();
+		for (int data : datas) {
+			buffer.append(data).append(",");
+		}
+		return buffer.toString();
+	}
+
+	private static boolean checkSortedArray(int[] datas) {
+		int i = 1;
+		for (; i < datas.length; i++) {
+			if (datas[i - 1] <= datas[i]) {
+				continue;
+			} else {
+				break;
+			}
+		}
+		if (i == datas.length) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Random rand = new Random();
 		
-		ArraySort sortArr = new ArraySort();
+		BasicArraySort sortArr = new BasicArraySort();
 		for(int i =0 ;i<10;i++){
 			sortArr.array[i] = rand.nextInt(100);
 			System.out.print(sortArr.array[i]+",");
@@ -204,6 +334,25 @@ public class ArraySort {
 		System.out.println("-SWAP-TIMED:"+sortArr.insertSort(sortArr.array.clone()));
 		System.out.println("-SWAP-TIMED:"+sortArr.shellSort(sortArr.array.clone()));
 		sortArr.heapSort(sortArr.array.clone()) ;
+		
+		
+		Random random = new Random();
+		int arrayLength = 21;
+		int[] array = new int[arrayLength];
+		for (int i = 0; i < arrayLength; i++) {
+			int data = random.nextInt(1000);
+			array[i] = data;
+		}
+		System.out.println("[SRC]" + getDatasInArray(array));
+		/* insert-sort */
+//		int[] sortedArray = basicInsertSort(array);
+//		int[] sortedArray = shellInsertSort(array);
+		/* switch-sort */
+//     	int[] sortedArray = bubbleSwitchSort(array);
+		int[] sortedArray = quickSwitchSort(array);
+
+		System.out.println("[SORTED]" + getDatasInArray(sortedArray));
+		System.out.println("[isSorted]" + checkSortedArray(sortedArray));
 	}
 
 }

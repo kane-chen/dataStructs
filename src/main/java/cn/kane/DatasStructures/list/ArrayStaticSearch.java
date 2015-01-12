@@ -1,4 +1,4 @@
-package cn.kane.DatasStructures;
+package cn.kane.DatasStructures.list;
 
 public class ArrayStaticSearch {
 

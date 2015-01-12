@@ -1,4 +1,4 @@
-package cn.kane.DatasStructures.string;
+package cn.kane.algorithm.stringschemal;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package cn.kane.DatasStructures;
+package cn.kane.DatasStructures.tree;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
